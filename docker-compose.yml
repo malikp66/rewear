@@ -15,6 +15,6 @@ services:
       - MINIO_BUCKET_NAME=rewear
       - MINIO_SECURE=True
       - SECRET_KEY=django-insecure-rm^d7zd$4j8n@xz3kmwu=88d8g(=*r2$(cdml^um^94w6s-#i=
-      - ALLOWED_HOSTS=localhost,127.0.0.1,208.77.246.15,django-server-production-fc7f.up.railway.app
+      - ALLOWED_HOSTS=localhost,127.0.0.1,208.77.246.15,rewear.up.railway.app
     ports:
       - "8000:8000"

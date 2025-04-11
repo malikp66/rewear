@@ -14,6 +14,9 @@ from django.core.cache import cache
 from pathlib import Path
 from dotenv import load_dotenv
 from custom_storage import MinioMediaStorage, MinioStaticStorage
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -30,9 +33,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-rm^d7zd$4j8n@xz3kmwu=88d8g(=*r2$(cdml^um^94w6s-#i=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+logger.info(f"DEBUG mode is set to: {DEBUG}")
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,208.77.246.15').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1', '208.77.246.15').split(',')
 
 CACHES = {
     'default': {
