@@ -8,7 +8,7 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=splIetFMTNAMjDJRtPBywxMLLvWESvAJ
       - DB_HOST=gondola.proxy.rlwy.net
-      - DB_PORT=5432
+      - DB_PORT=23686
       - SECRET_KEY=django-insecure-rm^d7zd$4j8n@xz3kmwu=88d8g(=*r2$(cdml^um^94w6s-#i=
       - ALLOWED_HOSTS=localhost,127.0.0.1,208.77.246.15
     ports:
