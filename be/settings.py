@@ -13,6 +13,7 @@ import os
 from django.core.cache import cache
 from pathlib import Path
 from dotenv import load_dotenv
+from custom_storage import MinioMediaStorage, MinioStaticStorage
 
 load_dotenv()
 
@@ -57,7 +58,30 @@ INSTALLED_APPS = [
 
     "authentification",
     "thrift",
+
+    'storages',
 ]
+
+# MinIO settings
+MINIO_ENDPOINT = os.environ.get('MINIO_ENDPOINT')
+MINIO_ACCESS_KEY = os.environ.get('MINIO_ACCESS_KEY')
+MINIO_SECRET_KEY = os.environ.get('MINIO_SECRET_KEY')
+MINIO_BUCKET_NAME = os.environ.get('MINIO_BUCKET_NAME')
+MINIO_SECURE = False  # set to False if not in prod
+
+# Django Storages settings
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
+AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
+AWS_STORAGE_BUCKET_NAME = MINIO_BUCKET_NAME
+AWS_S3_ENDPOINT_URL = f'{"https" if MINIO_SECURE else "http"}://{MINIO_ENDPOINT}'
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_DEFAULT_ACL = 'public-read'
+AWS_QUERYSTRING_AUTH = False
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -153,7 +177,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATICFILES_STORAGE = 'custom_storage.MinioStaticStorage'
+DEFAULT_FILE_STORAGE = 'custom_storage.MinioMediaStorage'
+
+# STATIC_URL = 'static/'
+MEDIA_URL = f'{"https" if MINIO_SECURE else "http"}://{MINIO_ENDPOINT}/{MINIO_BUCKET_NAME}/media/'
+STATIC_URL = f'{"https" if MINIO_SECURE else "http"}://{MINIO_ENDPOINT}/{MINIO_BUCKET_NAME}/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
