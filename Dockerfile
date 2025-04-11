@@ -19,4 +19,5 @@ COPY . /app/
 
 WORKDIR /app/be
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Change the CMD to use gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "be.wsgi:application"]
