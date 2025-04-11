@@ -9,7 +9,7 @@ services:
       - DB_PASSWORD=splIetFMTNAMjDJRtPBywxMLLvWESvAJ
       - DB_HOST=gondola.proxy.rlwy.net
       - DB_PORT=23686
-      - MINIO_ENDPOINT=https://bucket-production-3d7a.up.railway.app:443
+      - MINIO_ENDPOINT=bucket-production-3d7a.up.railway.app:443
       - MINIO_ACCESS_KEY=LPEUppnUEPp51bw4Owmz
       - MINIO_SECRET_KEY=RO1R6AbZhobWq8qiyzvj0c4EiET8Vi4XdyWUAWWU
       - MINIO_BUCKET_NAME=rewear
