@@ -36,7 +36,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-rm^d7zd$4j8n@xz3kmwu=
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 logger.info(f"DEBUG mode is set to: {DEBUG}")
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1', '208.77.246.15').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,208.77.246.15').split(',')
 
 CACHES = {
     'default': {
