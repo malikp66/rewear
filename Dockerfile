@@ -19,8 +19,5 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy seluruh konten direktori be ke dalam container
 COPY . .
 
-# Jalankan collectstatic
-RUN python manage.py collectstatic --noinput
-
 # Command untuk menjalankan aplikasi
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 be.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "be.wsgi:application"]
