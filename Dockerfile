@@ -19,5 +19,11 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy seluruh konten direktori be ke dalam container
 COPY . .
 
-# Command untuk menjalankan aplikasi
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "be.wsgi:application"]
+# Buat script entrypoint
+RUN echo '#!/bin/sh' > /entrypoint.sh && \
+    echo 'python manage.py collectstatic --noinput' >> /entrypoint.sh && \
+    echo 'gunicorn --bind 0.0.0.0:8000 be.wsgi:application' >> /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+# Command untuk menjalankan script entrypoint
+CMD ["/entrypoint.sh"]
