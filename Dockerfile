@@ -1,4 +1,3 @@
-# be/Dockerfile
 FROM python:3.9-slim
 
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -20,5 +19,8 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy seluruh konten direktori be ke dalam container
 COPY . .
 
+# Jalankan collectstatic
+RUN python manage.py collectstatic --noinput
+
 # Command untuk menjalankan aplikasi
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "be.wsgi:application"]
+CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 be.wsgi:application"]

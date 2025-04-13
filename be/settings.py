@@ -13,7 +13,7 @@ import os
 from django.core.cache import cache
 from pathlib import Path
 from dotenv import load_dotenv
-from custom_storage import MinioMediaStorage
+from custom_storage import MinioMediaStorage, MinioStaticStorage
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -66,6 +66,7 @@ MINIO_SECURE = os.environ.get('MINIO_SECURE')  # set to False if not in prod
 
 # Django Storages settings
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
 AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
@@ -81,6 +82,10 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
 }
 
 AUTH_USER_MODEL = "authentification.CustomUser"
@@ -171,10 +176,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+STATICFILES_STORAGE = 'custom_storage.MinioStaticStorage'
 DEFAULT_FILE_STORAGE = 'custom_storage.MinioMediaStorage'
 
+# STATIC_URL = 'static/'
 MEDIA_URL = f'{"https" if MINIO_SECURE else "http"}://{MINIO_ENDPOINT}/{MINIO_BUCKET_NAME}/media/'
-STATIC_URL = 'static/'
+STATIC_URL = f'{"https" if MINIO_SECURE else "http"}://{MINIO_ENDPOINT}/{MINIO_BUCKET_NAME}/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
