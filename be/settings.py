@@ -13,6 +13,7 @@ import os
 from django.core.cache import cache
 from pathlib import Path
 from dotenv import load_dotenv
+from rest_framework.renderers import StaticHTMLRenderer
 from custom_storage import MinioMediaStorage, MinioStaticStorage
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -65,8 +66,8 @@ MINIO_BUCKET_NAME = os.environ.get('MINIO_BUCKET_NAME')
 MINIO_SECURE = os.environ.get('MINIO_SECURE')  # set to False if not in prod
 
 # Django Storages settings
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
 AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
@@ -78,14 +79,35 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_DEFAULT_ACL = 'public-read'
 AWS_QUERYSTRING_AUTH = False
 
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.1/howto/static-files/
+
+# STATIC_URL = 'static/'
+STATIC_URL = 'static/'
+MEDIA_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/media/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+os.makedirs(os.path.join(BASE_DIR, 'static'), exist_ok=True)
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+STATICFILES_STORAGE = 'custom_storage.MinioStaticStorage'
+DEFAULT_FILE_STORAGE = 'custom_storage.MinioMediaStorage'
+
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-        'DEFAULT_RENDERER_CLASSES': (
+    'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ),
+        'thrift.renderers.CustomBrowsableAPIRenderer',
+        'rest_framework.renderers.StaticHTMLRenderer',
+    ],
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
@@ -102,6 +124,7 @@ AUTHENTICATION_BACKENDS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -165,6 +188,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+DJANGO_SETTINGS_MODULE = "be.settings"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -177,16 +201,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATICFILES_STORAGE = 'custom_storage.MinioStaticStorage'
-DEFAULT_FILE_STORAGE = 'custom_storage.MinioMediaStorage'
-
-# STATIC_URL = 'static/'
-MEDIA_URL = f'{"https" if MINIO_SECURE else "http"}://{MINIO_ENDPOINT}/{MINIO_BUCKET_NAME}/media/'
-STATIC_URL = f'{"https" if MINIO_SECURE else "http"}://{MINIO_ENDPOINT}/{MINIO_BUCKET_NAME}/static/'
+if DEBUG:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

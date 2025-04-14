@@ -16,10 +16,27 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
+from django.urls import get_resolver
+
+def list_urls(request):
+    url_patterns = get_resolver().url_patterns
+    url_list = []
+
+    def extract_urls(patterns, prefix=''):
+        for pattern in patterns:
+            if hasattr(pattern, 'url_patterns'):
+                extract_urls(pattern.url_patterns, prefix + str(pattern.pattern))
+            elif hasattr(pattern, 'pattern'):
+                url = prefix + str(pattern.pattern)
+                url_list.append(url.replace('^', '').replace('$', ''))
+
+    extract_urls(url_patterns)
+    return JsonResponse({'available_urls': url_list})
 
 urlpatterns = [
+    # path('', list_urls, name='url_list'),
     path("admin/", admin.site.urls),
     path("authentification/", include("authentification.urls")),
     path("api/", include("thrift.urls")),
 ]
-
