@@ -15,14 +15,3 @@ class MinioMediaStorage(S3Boto3Storage):
     def _open(self, name, mode='rb'):
         logger.info(f"Opening file: {name}")
         return super()._open(name, mode)
-
-class MinioStaticStorage(S3Boto3Storage):
-    location = 'static/'
-
-    def _save(self, name, content):
-        logger.info(f"Saving static file: {name}")
-        return super()._save(name, content)
-
-    def _open(self, name, mode='rb'):
-        logger.info(f"Opening static file: {name}")
-        return super()._open(name, mode)
