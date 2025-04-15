@@ -64,9 +64,6 @@ MINIO_SECRET_KEY = os.environ.get('MINIO_SECRET_KEY')
 MINIO_BUCKET_NAME = os.environ.get('MINIO_BUCKET_NAME')
 MINIO_SECURE = os.environ.get('MINIO_SECURE')  # set to False if not in prod
 
-# Django Storages settings
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
 AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
 AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
 AWS_STORAGE_BUCKET_NAME = MINIO_BUCKET_NAME
@@ -76,6 +73,8 @@ AWS_S3_OBJECT_PARAMETERS = {
 }
 AWS_DEFAULT_ACL = 'public-read'
 AWS_QUERYSTRING_AUTH = False
+
+logger.info(f"MinIO configuration: Endpoint={MINIO_ENDPOINT}, Bucket={MINIO_BUCKET_NAME}")
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
