@@ -21,9 +21,18 @@ COPY . .
 
 # Buat script entrypoint
 RUN echo '#!/bin/sh' > /entrypoint.sh && \
+    echo "Running collectstatic..." \
     echo 'python manage.py collectstatic --noinput' >> /entrypoint.sh && \
+    echo "Collectstatic completed." \
     echo 'gunicorn --bind 0.0.0.0:8000 be.wsgi:application' >> /entrypoint.sh && \
     chmod +x /entrypoint.sh
+
+RUN python manage.py collectstatic --noinput && \
+    if [ ! -f /app/be/staticfiles/rest_framework/css/bootstrap.min.css ]; then \
+        echo "Bootstrap CSS not found in staticfiles" && exit 1; \
+    fi
+
+RUN chmod -R 755 /app/be
 
 # Command untuk menjalankan script entrypoint
 CMD ["/entrypoint.sh"]

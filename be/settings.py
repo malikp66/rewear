@@ -187,6 +187,16 @@ MEDIA_URL = f'{"https" if MINIO_SECURE else "http"}://{MINIO_ENDPOINT}/{MINIO_BU
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+def show_debug_toolbar(request):
+    return True
+
+INTERNAL_IPS = ['127.0.0.1']
+SHOW_TOOLBAR_CALLBACK = show_debug_toolbar
+
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar']
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
