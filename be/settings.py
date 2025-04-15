@@ -36,7 +36,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-rm^d7zd$4j8n@xz3kmwu=
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 logger.info(f"DEBUG mode is set to: {DEBUG}")
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,rewear.up.railway.app').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 # Application definition
 
@@ -174,10 +174,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Tambahkan ini untuk menggunakan WhiteNoise di production
-if not DEBUG:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files masih menggunakan Minio
 DEFAULT_FILE_STORAGE = 'custom_storage.MinioMediaStorage'
