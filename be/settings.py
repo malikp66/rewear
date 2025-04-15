@@ -13,7 +13,7 @@ import os
 from django.core.cache import cache
 from pathlib import Path
 from dotenv import load_dotenv
-from custom_storage import MinioMediaStorage, MinioStaticStorage
+from custom_storage import MinioMediaStorage
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
