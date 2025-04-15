@@ -7,11 +7,3 @@ logger = logging.getLogger(__name__)
 class MinioMediaStorage(S3Boto3Storage):
     location = 'media/'
     file_overwrite = False
-
-    def _save(self, name, content):
-        logger.info(f"Saving file: {name}")
-        return super()._save(name, content)
-
-    def _open(self, name, mode='rb'):
-        logger.info(f"Opening file: {name}")
-        return super()._open(name, mode)
