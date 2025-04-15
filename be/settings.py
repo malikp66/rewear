@@ -66,7 +66,6 @@ MINIO_SECURE = os.environ.get('MINIO_SECURE')  # set to False if not in prod
 
 # Django Storages settings
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AWS_ACCESS_KEY_ID = MINIO_ACCESS_KEY
 AWS_SECRET_ACCESS_KEY = MINIO_SECRET_KEY
@@ -81,15 +80,6 @@ AWS_QUERYSTRING_AUTH = False
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-        'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ),
-    'DEFAULT_PARSER_CLASSES': (
-        'rest_framework.parsers.JSONParser',
-        'rest_framework.parsers.FormParser',
-        'rest_framework.parsers.MultiPartParser'
     ),
 }
 
