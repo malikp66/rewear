@@ -50,6 +50,13 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework.authtoken",
+    "rest_framework_simplejwt.token_blacklist",
+    "corsheaders",
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
     "authentification",
     "thrift",
@@ -76,12 +83,6 @@ AWS_QUERYSTRING_AUTH = False
 
 logger.info(f"MinIO configuration: Endpoint={MINIO_ENDPOINT}, Bucket={MINIO_BUCKET_NAME}")
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-}
-
 AUTH_USER_MODEL = "authentification.CustomUser"
 
 AUTHENTICATION_BACKENDS = [
@@ -90,6 +91,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Tambahkan ini
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -98,6 +100,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'be.urls'

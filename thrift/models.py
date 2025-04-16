@@ -156,8 +156,8 @@ class Order(models.Model):
         return f"{gender}-{category}-{payment}-{sequence}"
 
     def save(self, *args, **kwargs):
-        if not self.kode:
-            self.kode = self.generate_order_code()
+        # if not self.kode:
+        #     self.kode = self.generate_order_code()
         super().save(*args, **kwargs)
 
     def __str__(self):
