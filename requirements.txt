@@ -21,7 +21,6 @@ minio==7.2.15
 pillow==11.1.0
 psycopg==3.2.6
 psycopg-binary==3.2.6
-psycopg2==2.9.10
 pycparser==2.22
 pycryptodome==3.22.0
 PyJWT==2.9.0
