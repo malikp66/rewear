@@ -16,6 +16,13 @@ class SellerListView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ['store_name']
 
+
+class SellerRetrieveView(generics.RetrieveAPIView):
+    queryset = User.objects.filter(is_seller=True)
+    serializer_class = SellerDetailSerializer
+    permission_classes = [AllowAny]
+    lookup_field = 'id'
+
 class UserDetailView(APIView):
     def get(self, request):
         user = request.user
