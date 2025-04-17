@@ -9,7 +9,6 @@ from rest_framework import status, filters
 
 User = get_user_model()
 
-
 class SellerListView(generics.ListAPIView):
     queryset = User.objects.filter(is_seller=True)
     serializer_class = SellerDetailSerializer
