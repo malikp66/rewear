@@ -10,6 +10,7 @@ from django.core.validators import RegexValidator
 
 class CustomUser(AbstractUser):
     is_seller = models.BooleanField(default=False)  
+    profile_pics = models.ImageField(upload_to='profilepics/', blank=True, null=True)
     store_name = models.CharField(max_length=255, null=True, blank=True)
     store_phone_number = models.CharField(
         max_length=20, null=True, blank=True,

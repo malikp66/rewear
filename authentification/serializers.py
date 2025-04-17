@@ -5,6 +5,25 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model()
 
+class SellerDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username', 'email', 'is_seller', 'profile_pics',
+            'store_name', 'store_phone_number', 'npwp', 'address_store',
+            'province', 'city', 'subdistrict', 'store_owner_name',
+            'phone_number', 'nik', 'bank_name', 'bank_account_number', 'bank_account_holder_name',
+        ]
+        
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username', 'email',
+            'is_seller', 'profile_pics', 'store_name', 'store_phone_number',
+            'npwp', 'address_store', 'province', 'city', 'subdistrict', 'store_owner_name',
+            'phone_number', 'nik', 'bank_name', 'bank_account_number', 'bank_account_holder_name',
+        ]
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
