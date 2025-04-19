@@ -24,8 +24,6 @@ class SellerRetrieveView(generics.RetrieveAPIView):
     lookup_field = 'id'
 
 class UserDetailView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def get(self, request):
         user = request.user
         serializer = UserSerializer(user)
