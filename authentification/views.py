@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth import get_user_model
 from .serializers import RegisterBuyerSerializer, BecomeSellerSerializer, CustomTokenObtainPairSerializer, UserSerializer, SellerDetailSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -24,12 +25,25 @@ class SellerRetrieveView(generics.RetrieveAPIView):
     lookup_field = 'id'
 
 class UserDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
     def get(self, request):
         user = request.user
-        serializer = UserSerializer(user)
-        print('serializer: ', serializer)
-        print('user: ', user)
-        return Response(serializer.data)
+        token = request.auth
+
+        if token is None:
+            return Response({"error": "No valid token provided"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        user_data = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'is_seller': user.is_seller,
+        }
+
+        return Response(user_data)
+
 
 class RegisterBuyerView(generics.CreateAPIView):
     queryset = User.objects.all()
