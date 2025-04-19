@@ -27,6 +27,8 @@ class UserDetailView(APIView):
     def get(self, request):
         user = request.user
         serializer = UserSerializer(user)
+        print('serializer: ', serializer)
+        print('user: ', user)
         return Response(serializer.data)
 
 class RegisterBuyerView(generics.CreateAPIView):
