@@ -42,12 +42,10 @@ class OrderItemAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('sender', 'order', 'rating', 'created_at')
-    search_fields = ('sender__username', 'order__customer__username')
+    list_display = ('sender', 'product', 'rating', 'created_at')
+    search_fields = ('sender__username', 'product__name')
     list_filter = ('rating', 'created_at')
     readonly_fields = ('created_at',)
-
-
 @admin.register(Wallet)
 class WalletAdmin(admin.ModelAdmin):
     list_display = ('user', 'balance', 'refund', 'profit')
