@@ -11,6 +11,7 @@ class SellerDetailSerializer(serializers.ModelSerializer):
     total_products_sold = serializers.SerializerMethodField()
     total_rating_from_sold_products = serializers.SerializerMethodField()
     last_online = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
+    total_products_count = serializers.SerializerMethodField()  # Add this line
 
     class Meta:
         model = User
@@ -34,7 +35,7 @@ class SellerDetailSerializer(serializers.ModelSerializer):
     
     def get_total_products_count(self, obj):
         return Product.objects.filter(seller=obj).count()
-        
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
