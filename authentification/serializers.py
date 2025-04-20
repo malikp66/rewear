@@ -11,7 +11,7 @@ class SellerDetailSerializer(serializers.ModelSerializer):
     total_products_sold = serializers.SerializerMethodField()
     total_rating_from_sold_products = serializers.SerializerMethodField()
     last_online = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
-    total_products_count = serializers.SerializerMethodField()  # Add this line
+    total_products_count = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -26,10 +26,10 @@ class SellerDetailSerializer(serializers.ModelSerializer):
 
     def get_total_products_sold(self, obj):
         order_items = OrderItem.objects.filter(product__seller=obj)
-        return order_items.aggregate(total=Avg('quantity'))['total'] or 0
+        return order_items.count()
 
     def get_total_rating_from_sold_products(self, obj):
-        products = Product.objects.filter(seller=obj, sold_count__gt=0)
+        products = Product.objects.filter(seller=obj)
         rating_avg = products.aggregate(avg_rating=Avg('rating'))['avg_rating']
         return round(rating_avg or 0.0, 2)
     
