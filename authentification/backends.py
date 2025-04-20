@@ -1,5 +1,6 @@
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth import get_user_model
+from django.utils.timezone import now
 
 User = get_user_model()
 
@@ -11,6 +12,9 @@ class EmailBackend(BaseBackend):
             return None
 
         if user.check_password(password):
+            # Update last_online when user successfully authenticates
+            user.last_online = now()
+            user.save(update_fields=['last_online'])
             return user
         return None
 

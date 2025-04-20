@@ -10,7 +10,7 @@ User = get_user_model()
 class SellerDetailSerializer(serializers.ModelSerializer):
     total_products_sold = serializers.SerializerMethodField()
     total_rating_from_sold_products = serializers.SerializerMethodField()
-    last_online = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
+    last_online = serializers.SerializerMethodField()
     total_products_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -31,6 +31,11 @@ class SellerDetailSerializer(serializers.ModelSerializer):
         reviews = Review.objects.filter(product__seller=obj)
         rating_avg = reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
         return round(rating_avg or 0.0, 2)
+    
+    def get_last_online(self, obj):
+        if obj.last_online:
+            return obj.last_online.strftime("%Y-%m-%d %H:%M:%S")
+        return "Belum pernah online"
     
     def get_total_products_count(self, obj):
         return Product.objects.filter(seller=obj).count()

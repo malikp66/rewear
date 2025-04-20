@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from datetime import timedelta
+from django.utils.timezone import now
+
 import random
 import string
 from django.core.validators import RegexValidator
@@ -31,7 +33,7 @@ class CustomUser(AbstractUser):
     bank_account_number = models.CharField(max_length=50, null=True, blank=True)
     bank_account_holder_name = models.CharField(max_length=255, null=True, blank=True)
     
-    last_online = models.DateTimeField(null=True, blank=True)
+    last_online = models.DateTimeField(default=now, null=True, blank=True)
 
     REQUIRED_FIELDS = ['email'] 
     
