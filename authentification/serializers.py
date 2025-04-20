@@ -2,7 +2,7 @@ import re
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from thrift.models import Product, OrderItem
+from thrift.models import Product, OrderItem, Review
 from django.db.models import Avg
 
 User = get_user_model()
@@ -25,12 +25,11 @@ class SellerDetailSerializer(serializers.ModelSerializer):
         ]
 
     def get_total_products_sold(self, obj):
-        order_items = OrderItem.objects.filter(product__seller=obj)
-        return order_items.count()
+        return OrderItem.objects.filter(product__seller=obj).count()
 
     def get_total_rating_from_sold_products(self, obj):
-        products = Product.objects.filter(seller=obj)
-        rating_avg = products.aggregate(avg_rating=Avg('rating'))['avg_rating']
+        reviews = Review.objects.filter(product__seller=obj)
+        rating_avg = reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
         return round(rating_avg or 0.0, 2)
     
     def get_total_products_count(self, obj):
