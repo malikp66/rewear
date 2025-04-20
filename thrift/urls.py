@@ -12,7 +12,7 @@ router.register(r'reviews', ReviewViewSet)
 router.register(r'wallets', WalletViewSet)
 router.register(r'chats', ChatViewSet)
 router.register(r'carts', CartViewSet)
-router.register(r'cart-items', CartItemViewSet)
+router.register(r'cart-items', CartItemViewSet, basename='cartitem')
 
 urlpatterns = [
     path('', include(router.urls)),

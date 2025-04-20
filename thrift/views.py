@@ -45,7 +45,32 @@ class ChatViewSet(viewsets.ModelViewSet):
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
+    
+    def get_queryset(self):
+        queryset = Cart.objects.all()
+        user_id = self.request.query_params.get('user', None)
+        is_active = self.request.query_params.get('is_active', None)
+
+        if user_id is not None:
+            queryset = queryset.filter(user_id=user_id)
+        
+        if is_active is not None:
+            queryset = queryset.filter(is_active=is_active.lower() == 'true')
+
+        return queryset
 
 class CartItemViewSet(viewsets.ModelViewSet):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
+
+    def get_queryset(self):
+        queryset = CartItem.objects.all()
+        cart_id = self.request.query_params.get('cart', None)
+        product_id = self.request.query_params.get('product', None)
+
+        if cart_id is not None:
+            queryset = queryset.filter(cart_id=cart_id)
+        if product_id is not None:
+            queryset = queryset.filter(product_id=product_id)
+
+        return queryset
