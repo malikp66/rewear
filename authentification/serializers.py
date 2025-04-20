@@ -2,18 +2,38 @@ import re
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from thrift.models import Product, OrderItem
+from django.db.models import Avg
 
 User = get_user_model()
 
 class SellerDetailSerializer(serializers.ModelSerializer):
+    total_products_sold = serializers.SerializerMethodField()
+    total_rating_from_sold_products = serializers.SerializerMethodField()
+    last_online = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", read_only=True)
+
     class Meta:
         model = User
         fields = [
             'id', 'username', 'email', 'is_seller', 'profile_pics',
             'store_name', 'store_phone_number', 'npwp', 'address_store',
             'province', 'city', 'subdistrict', 'store_owner_name',
-            'phone_number', 'nik', 'bank_name', 'bank_account_number', 'bank_account_holder_name',
+            'phone_number', 'nik', 'bank_name', 'bank_account_number', 
+            'bank_account_holder_name', 'last_online', 'total_products_sold',
+            'total_rating_from_sold_products', 'total_products_count',
         ]
+
+    def get_total_products_sold(self, obj):
+        order_items = OrderItem.objects.filter(product__seller=obj)
+        return order_items.aggregate(total=Avg('quantity'))['total'] or 0
+
+    def get_total_rating_from_sold_products(self, obj):
+        products = Product.objects.filter(seller=obj, sold_count__gt=0)
+        rating_avg = products.aggregate(avg_rating=Avg('rating'))['avg_rating']
+        return round(rating_avg or 0.0, 2)
+    
+    def get_total_products_count(self, obj):
+        return Product.objects.filter(seller=obj).count()
         
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -71,6 +91,11 @@ class RegisterBuyerSerializer(serializers.ModelSerializer):
 
         return value
     
+    def validate_email(self, value):
+        if User.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError("Email sudah digunakan. Silakan gunakan email lain.")
+        return value    
+
     def validate_password(self, value):
         if len(value) < 8:
             raise serializers.ValidationError("Password harus memiliki minimal 8 karakter.")

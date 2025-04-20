@@ -101,6 +101,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'authentification.middleware.UpdateLastOnlineMiddleware',
 ]
 
 ROOT_URLCONF = 'be.urls'

@@ -31,6 +31,10 @@ class CustomUser(AbstractUser):
     bank_account_number = models.CharField(max_length=50, null=True, blank=True)
     bank_account_holder_name = models.CharField(max_length=255, null=True, blank=True)
     
+    last_online = models.DateTimeField(null=True, blank=True)
+
+    REQUIRED_FIELDS = ['email'] 
+    
     def __str__(self):
         return self.username
 

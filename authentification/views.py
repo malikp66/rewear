@@ -7,16 +7,18 @@ from django.contrib.auth import get_user_model
 from .serializers import RegisterBuyerSerializer, BecomeSellerSerializer, CustomTokenObtainPairSerializer, UserSerializer, SellerDetailSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status, filters
+from thrift.models import Product, OrderItem
+from django.db.models import Avg
+from django.utils.timezone import now
 
 User = get_user_model()
 
 class SellerListView(generics.ListAPIView):
     queryset = User.objects.filter(is_seller=True)
     serializer_class = SellerDetailSerializer
-    permission_classes = [AllowAny] 
+    permission_classes = [AllowAny]
     filter_backends = [filters.SearchFilter]
     search_fields = ['store_name']
-
 
 class SellerRetrieveView(generics.RetrieveAPIView):
     queryset = User.objects.filter(is_seller=True)

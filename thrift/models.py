@@ -136,7 +136,7 @@ class Order(models.Model):
                 discount = self.promo.discount_amount
             else:
                 discount = 0
-            self.final_amount = max(self.total_price - discount, 0)  # Pastikan tidak negatif
+            self.final_amount = max(self.total_price - discount, 0)  
         else:
             self.final_amount = self.total_price
 
@@ -173,8 +173,8 @@ class OrderItem(models.Model):
     
 class Review(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    order = models.OneToOneField(Order, on_delete=models.CASCADE)
-    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
