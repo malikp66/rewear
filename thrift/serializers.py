@@ -1,6 +1,9 @@
 from rest_framework import serializers
-from .models import Address, Product, Promo, Order, OrderItem, Review, Wallet, Chat, Cart, CartItem
+from django.contrib.auth import get_user_model
+from .models import Address, Product, Promo, Order, OrderItem, Review, Wallet, Chat, Cart, CartItem, Collection
+from authentification.serializers import UserSerializer
 
+User = get_user_model()
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
@@ -50,3 +53,16 @@ class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = '__all__'
+
+class CollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Collection
+        fields = ['id', 'name', 'user', 'products', 'created_at']
+
+class CollectionDetailSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    products = ProductSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Collection
+        fields = ['id', 'name', 'user', 'products', 'created_at']

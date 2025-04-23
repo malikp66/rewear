@@ -233,3 +233,11 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.product.name} x {self.product.price}"
     
+class Collection(models.Model):
+    name = models.CharField(max_length=255, default="All Favorites")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='collections')
+    products = models.ManyToManyField(Product, related_name='collections')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

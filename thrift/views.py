@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Address, Product, Promo, Order, OrderItem, Review, Wallet, Chat, Cart, CartItem
-from .serializers import AddressSerializer, ProductSerializer, PromoSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer, WalletSerializer, ChatSerializer, CartSerializer, CartItemSerializer
+from .models import Address, Product, Promo, Order, OrderItem, Review, Wallet, Chat, Cart, CartItem, Collection
+from .serializers import AddressSerializer, ProductSerializer, PromoSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer, WalletSerializer, ChatSerializer, CartSerializer, CartItemSerializer, CollectionSerializer, CollectionDetailSerializer
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
@@ -74,3 +74,16 @@ class CartItemViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(product_id=product_id)
 
         return queryset
+    
+class CollectionViewSet(viewsets.ModelViewSet):
+    queryset = Collection.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return CollectionDetailSerializer
+        return CollectionSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Collection.objects.filter(user=self.request.user)
+        return Collection.objects.none()
