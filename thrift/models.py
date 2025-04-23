@@ -193,8 +193,8 @@ class Wallet(models.Model):
 class Chat(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="senders")
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="receivers")
-    message = models.TextField(null=True,blank=True)
-    image_message = models.ImageField(null=True,blank=True)
+    message = models.TextField(null=True, blank=True)
+    image_message = models.ImageField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
