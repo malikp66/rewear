@@ -87,8 +87,11 @@ class CollectionViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
+            print(f"Current request.user: {self.request.user}")
             return Collection.objects.filter(user=self.request.user)
+        print("Request user not authenticated")
         return Collection.objects.none()
+
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
