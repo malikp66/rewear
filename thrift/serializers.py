@@ -54,14 +54,22 @@ class CartItemSerializer(serializers.ModelSerializer):
         model = CartItem
         fields = '__all__'
 
+
 class CollectionSerializer(serializers.ModelSerializer):
+    products = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Product.objects.all(),
+        required=False,           
+        allow_empty=True           
+    )
+
     class Meta:
         model = Collection
         fields = ['id', 'name', 'user', 'products', 'created_at']
 
 class CollectionDetailSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    products = ProductSerializer(many=True, read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
+    products = serializers.PrimaryKeyRelatedField(many=True, queryset=Product.objects.all())
 
     class Meta:
         model = Collection

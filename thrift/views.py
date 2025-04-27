@@ -1,6 +1,8 @@
 from rest_framework import viewsets
 from .models import Address, Product, Promo, Order, OrderItem, Review, Wallet, Chat, Cart, CartItem, Collection
 from .serializers import AddressSerializer, ProductSerializer, PromoSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer, WalletSerializer, ChatSerializer, CartSerializer, CartItemSerializer, CollectionSerializer, CollectionDetailSerializer
+from rest_framework import viewsets, status
+from rest_framework.response import Response
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
@@ -87,3 +89,17 @@ class CollectionViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             return Collection.objects.filter(user=self.request.user)
         return Collection.objects.none()
+
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        products = request.data.get('products', None)
+
+        if products is not None:
+            # Cuma update products
+            instance.products.set(products)
+            instance.save()
+
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return super().partial_update(request, *args, **kwargs)
