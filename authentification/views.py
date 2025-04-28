@@ -72,12 +72,12 @@ class RegisterBuyerView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
 
 class BecomeSellerView(APIView):
-    """permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
     
-    Atau kalau udah nggak error lagi bisa mintol ganti dua yang atas make ini"""
-    permission_classes = [permissions.allowAny]
-    authentication_classes = [permissions.allowAny]
+    #Atau kalau udah nggak error lagi bisa mintol ganti dua yang atas make ini"""
+    # permission_classes = [permissions.allowAny]
+    # authentication_classes = [permissions.allowAny]
     
     def patch(self, request):
         logger.info(f"Request headers: {request.headers}")
