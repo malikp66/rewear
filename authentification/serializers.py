@@ -150,12 +150,6 @@ class BecomeSellerSerializer(serializers.ModelSerializer):
             "bank_account_number": {"required": True},
         }
 
-    def validate_nik(self, value):
-        if not re.match(r'^\d{16}$', value):
-            raise serializers.ValidationError("NIK harus 16 digit angka.")
-        return value
-
-
     def update(self, instance, validated_data):
         for attr, value in validated_data.items():
             setattr(instance, attr, value)

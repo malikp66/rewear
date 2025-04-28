@@ -10,6 +10,8 @@ from rest_framework import status, filters
 from thrift.models import Product, OrderItem
 from django.db.models import Avg
 from django.utils.timezone import now
+from rest_framework.parsers import JSONParser
+
 
 User = get_user_model()
 
@@ -26,7 +28,6 @@ class SellerRetrieveView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     lookup_field = 'id'
 
-from rest_framework.parsers import JSONParser
 
 class UserDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -64,8 +65,13 @@ class RegisterBuyerView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
 
 class BecomeSellerView(APIView):
-    permission_classes = [IsAuthenticated]
-
+    """permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+    
+    Atau kalau udah nggak error lagi bisa mintol ganti dua yang atas make ini"""
+    permission_classes = [permissions.allowAny]
+    authentication_classes = [permissions.allowAny]
+    
     def patch(self, request):
         serializer = BecomeSellerSerializer(instance=request.user, data=request.data, partial=True)
         if serializer.is_valid():
