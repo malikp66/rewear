@@ -150,15 +150,29 @@ class BecomeSellerSerializer(serializers.ModelSerializer):
             "bank_account_number": {"required": True},
         }
 
-    def validate_nik(self, value):
-        if not re.match(r'^\d{16}$', value):
-            raise serializers.ValidationError("NIK harus 16 digit angka.")
-        return value
-
-
     def update(self, instance, validated_data):
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.is_seller = True
         instance.save()
         return instance
+    
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+class VerifyOTPSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    otp = serializers.CharField(max_length=5)
+
+class ResendOTPSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+class ResetPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    password2 = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError("Passwords do not match.")
+        return attrs
