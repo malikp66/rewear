@@ -17,6 +17,7 @@ from custom_storage import MinioMediaStorage
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+from datetime import timedelta
 
 load_dotenv()
 
@@ -68,6 +69,20 @@ INSTALLED_APPS = [
     'storages',
     'channels',  # Add this for WebSocket support
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 CORS_ALLOWED_ORIGINS = [
     "https://rewear.up.railway.app",

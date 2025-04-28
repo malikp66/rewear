@@ -10,6 +10,9 @@ from rest_framework import status, filters
 from thrift.models import Product, OrderItem
 from django.db.models import Avg
 from django.utils.timezone import now
+import logging
+
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -65,8 +68,11 @@ class RegisterBuyerView(generics.CreateAPIView):
 
 class BecomeSellerView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
     def patch(self, request):
+        logger.info(f"Request headers: {request.headers}")
+        logger.info(f"Request user: {request.user}")
         serializer = BecomeSellerSerializer(instance=request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
