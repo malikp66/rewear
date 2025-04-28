@@ -37,6 +37,10 @@ DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 logger.info(f"DEBUG mode is set to: {DEBUG}")
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+CORS_ALLOW_ALL_ORIGINS = True
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
@@ -63,6 +67,11 @@ INSTALLED_APPS = [
 
     'storages',
     'channels',  # Add this for WebSocket support
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://rewear.up.railway.app",
+    "http://localhost:8000",
 ]
 
 # MinIO settings
