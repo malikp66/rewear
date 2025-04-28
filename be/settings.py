@@ -198,6 +198,11 @@ MEDIA_URL = f'{"https" if MINIO_SECURE else "http"}://{MINIO_ENDPOINT}/{MINIO_BU
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+if DEBUG:
+    import warnings
+    warnings.filterwarnings("ignore", message="No directory at", category=UserWarning)
+    WSGI_APPLICATION = 'be.wsgi.application'
+
 def show_debug_toolbar(request):
     return True
 

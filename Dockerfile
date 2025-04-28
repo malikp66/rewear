@@ -22,7 +22,6 @@ WORKDIR /app
 
 # Install system dependencies including nginx
 RUN apt-get update && apt-get install -y \
-    nginx \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -37,9 +36,6 @@ COPY . .
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
-
-# Copy custom nginx config
-COPY ./nginx/default.conf /etc/nginx/sites-available/default
 
 # Copy entrypoint script
 COPY ./entrypoint.sh /entrypoint.sh
