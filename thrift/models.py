@@ -21,13 +21,12 @@ class Address(models.Model):
     phone_number = models.CharField(
         validators=[phone_regex],
         max_length=15,
-        unique=True,
         help_text="Format yang diterima: 081234567890, 6281234567890, atau +6281234567890"
     )
 
     def __str__(self):
         return f"Address of {self.user.username}"
-
+    
 class Product(models.Model):
     CATEGORY_GENDER_CHOICES = [
         ("men", "Men"),
